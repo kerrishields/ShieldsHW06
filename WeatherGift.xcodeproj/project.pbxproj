@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0322B3D51E8C50DE0022FDDF /* DayWeatherCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0322B3D41E8C50DE0022FDDF /* DayWeatherCell.swift */; };
 		0346E2591E7866E3000F43F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0346E2581E7866E3000F43F1 /* AppDelegate.swift */; };
 		0346E25E1E7866E3000F43F1 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0346E25C1E7866E3000F43F1 /* Main.storyboard */; };
 		0346E2601E7866E3000F43F1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0346E25F1E7866E3000F43F1 /* Assets.xcassets */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		0322B3D41E8C50DE0022FDDF /* DayWeatherCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DayWeatherCell.swift; sourceTree = "<group>"; };
 		0346E2551E7866E3000F43F1 /* WeatherGift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeatherGift.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0346E2581E7866E3000F43F1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0346E25D1E7866E3000F43F1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -73,6 +75,7 @@
 				0379F18A1E80BC9C00A004FD /* WeatherLocation.swift */,
 				0346E26E1E786BE4000F43F1 /* PageVC.swift */,
 				0346E26A1E786747000F43F1 /* DetailVC.swift */,
+				0322B3D41E8C50DE0022FDDF /* DayWeatherCell.swift */,
 				038AF8731E830DD700E2C224 /* constants.swift */,
 				0346E26C1E786A36000F43F1 /* ListVC.swift */,
 				0346E25C1E7866E3000F43F1 /* Main.storyboard */,
@@ -224,6 +227,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0322B3D51E8C50DE0022FDDF /* DayWeatherCell.swift in Sources */,
 				0379F18B1E80BC9C00A004FD /* WeatherLocation.swift in Sources */,
 				0346E26D1E786A36000F43F1 /* ListVC.swift in Sources */,
 				0346E26F1E786BE4000F43F1 /* PageVC.swift in Sources */,
