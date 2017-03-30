@@ -61,6 +61,7 @@ class DetailVC: UIViewController {
         summaryLabel.text = locationsArray[currentPage].dailySummary
         
         currentImage.image = UIImage(named: locationsArray[currentPage].currentIcon)
+        tableView.reloadData()
     }
 
     func formatTimeForTimeZone(unixDateToFormat: TimeInterval, timeZoneString: String) -> String {
@@ -70,6 +71,7 @@ class DetailVC: UIViewController {
         dateFormatter.timeZone = TimeZone(identifier: timeZoneString)
         let dateString = dateFormatter.string(from: usableDate)
         return dateString
+        
     }
 
 }
@@ -147,12 +149,13 @@ extension DetailVC: CLLocationManagerDelegate {
 
 extension DetailVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return locationsArray[currentPage].dailyForecastArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "DayWeatherCell")
-        return cell!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "DayWeatherCell") as! DayWeatherCell
+        cell.configureTableCell(dailyForecast: self.locationsArray[currentPage].dailyForecastArray[indexPath.row], timeZone: self.locationsArray[currentPage].timeZone)
+        return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -34,4 +34,22 @@ class DayWeatherCell: UITableViewCell {
         
     }
 
+    
+    func configureTableCell(dailyForecast: WeatherLocation.DailyForecast, timeZone: String) {
+        cellMaxTemp.text = String(format: "%2.f", dailyForecast.dailyMaxTemp) + "°"
+        cellMinTemp.text = String(format: "%2.f", dailyForecast.dailyMinTemp) + "°"
+        cellSummary.text = dailyForecast.dailySummary
+        cellIcon.image = UIImage(named: dailyForecast.dailyIcon)
+        let usableDate = Date(timeIntervalSince1970: dailyForecast.dailyDate)
+        let dailytimeZone = TimeZone(identifier: timeZone)
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "EEEE"
+        dateFormatter.timeZone = dailytimeZone
+        
+        let weekDay = dateFormatter.string(from: usableDate)
+        cellWeekday.text = weekDay
+        
+    }
+    
 }
