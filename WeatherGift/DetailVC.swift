@@ -17,7 +17,7 @@ class DetailVC: UIViewController {
     @IBOutlet weak var summaryLabel: UILabel!
     @IBOutlet weak var currentImage: UIImageView!
     @IBOutlet weak var tableView: UITableView!
-    
+    @IBOutlet weak var collectionView: UICollectionView!
     
     
     
@@ -33,14 +33,30 @@ class DetailVC: UIViewController {
 
         tableView.delegate = self
         tableView.dataSource = self
+        collectionView.delegate = self
+        collectionView.dataSource = self
         locationManager.delegate = self
-        if currentPage == 0 {
-            getLocation()
-        }
+//        if currentPage == 0 {
+//            getLocation()
+//        }
         locationsArray[currentPage].getWeather {
             self.updateUserInterface()
         }
         
+    }
+//    
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        if currentPage == 0 {
+//            getLocation()
+//        }
+//    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(true)
+        if currentPage == 0 {
+            getLocation()
+        }
     }
 
     func updateUserInterface() {
@@ -53,8 +69,15 @@ class DetailVC: UIViewController {
         
         
         locationLabel.text = locationsArray[currentPage].name
-        dateLabel.text = formatTimeForTimeZone(unixDateToFormat: locationsArray[currentPage].currentTime, timeZoneString: locationsArray[currentPage].timeZone)
-        //dateLabel.text = locationsArray[currentPage].coordinates
+        
+        if locationsArray[currentPage].currentTime == 0.0 {
+            dateLabel.text = ""
+        } else {
+            dateLabel.text = formatTimeForTimeZone(unixDateToFormat: locationsArray[currentPage].currentTime, timeZoneString: locationsArray[currentPage].timeZone)
+            
+        }
+        
+        
         let curTemperature = String(format: "%3.f", locationsArray[currentPage].currentTemp) + "°"
         temperatureLabel.text = curTemperature
         print("curTemperature is \(curTemperature)")
@@ -62,6 +85,7 @@ class DetailVC: UIViewController {
         
         currentImage.image = UIImage(named: locationsArray[currentPage].currentIcon)
         tableView.reloadData()
+        collectionView.reloadData()
     }
 
     func formatTimeForTimeZone(unixDateToFormat: TimeInterval, timeZoneString: String) -> String {
@@ -91,12 +115,21 @@ extension DetailVC: CLLocationManagerDelegate {
         case .authorizedWhenInUse, .authorizedAlways:
             locationManager.startUpdatingLocation()
         case .denied:
-            print("user has not authorized location services")
+            if currentPage == 0 && self.view.window != nil {
+            showAlert(title: "user has not authorized location services", message: "open the settings app > privacy > location services > WeatherGift to enable location services in this app")
+            }
         case .restricted:
-            print("access denied - likely parental controls preventing location use in this app")
+             showAlert(title: "location services denied", message: "parental controls may restrict location use in this app")
 
     }
                 }
+    
+    func showAlert(title: String, message: String) {
+        let alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let defaultAction = UIAlertAction(title: "ok", style: .default, handler: nil)
+        alertController.addAction(defaultAction)
+        present(alertController, animated: true, completion: nil)
+    }
     
     
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
@@ -109,7 +142,7 @@ extension DetailVC: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
        
-        if currentPage == 0 {
+        if currentPage == 0 && self.view.window != nil {
         
         let geoCoder = CLGeocoder()
         
@@ -164,5 +197,20 @@ extension DetailVC: UITableViewDelegate, UITableViewDataSource {
     
 }
 
+extension DetailVC: UICollectionViewDelegate, UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return locationsArray[currentPage].hourlyForecastArray.count
+        
+    }
+    
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let hourlyCell = collectionView.dequeueReusableCell(withReuseIdentifier: "HourlyCell", for: indexPath) as! HourlyWeatherCell
+        hourlyCell.configureCollectionCell(hourlyForecast: self.locationsArray[currentPage].hourlyForecastArray[indexPath.row], timeZone: self.locationsArray[currentPage].timeZone)
+        return hourlyCell
+    }
+    
+    
+}
 
 

@@ -59,6 +59,13 @@ class ListVC: UIViewController {
         
     }
     
+    func saveUserDefaults() {
+        var locationsDefaultsArray = [WeatherUserDefault]()
+        locationsDefaultsArray = locationsArray
+        let locationsData = NSKeyedArchiver.archivedData(withRootObject: locationsDefaultsArray)
+        UserDefaults.standard.set(locationsData, forKey: "locationsData")
+    }
+    
 
 }
 
@@ -82,7 +89,7 @@ extension ListVC: UITableViewDataSource, UITableViewDelegate {
         if editingStyle == .delete {
             locationsArray.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
-            
+            saveUserDefaults()
         }
     }
     
@@ -93,6 +100,8 @@ extension ListVC: UITableViewDataSource, UITableViewDelegate {
         locationsArray.remove(at: sourceIndexPath.row)
         //insert to new location
         locationsArray.insert(itemToMove, at: destinationIndexPath.row)
+        
+        saveUserDefaults()
     }
     
     //MARK: - tableview code to freeze the first cell (no deleting or moving)
@@ -120,7 +129,7 @@ extension ListVC: UITableViewDataSource, UITableViewDelegate {
     }
 
     func updateTable(placeName: GMSPlace) {
-        var newLocation = WeatherLocation()
+        let newLocation = WeatherLocation()
         newLocation.name = placeName.name
         let lat = placeName.coordinate.latitude
         let long = placeName.coordinate.longitude
@@ -128,6 +137,7 @@ extension ListVC: UITableViewDataSource, UITableViewDelegate {
         print(newLocation.coordinates)
         locationsArray.append(newLocation)
         tableView.reloadData()
+        saveUserDefaults()
     }
 
 }
